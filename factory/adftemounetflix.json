@@ -1,0 +1,15 @@
+{
+	"name": "adftemounetflix",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "germanywestcentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "703aaaab-6528-4024-a5ef-72d3993610ec",
+		"tenantId": "446f43a1-1231-4ba9-bb00-2e076b052aa7"
+	}
+}
