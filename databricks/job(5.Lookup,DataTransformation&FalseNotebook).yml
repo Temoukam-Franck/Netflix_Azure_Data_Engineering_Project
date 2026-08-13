@@ -1,0 +1,46 @@
+resources:
+  jobs:
+    New_Job_2026_08_13_17_09_54:
+      name: New Job 2026-08-13 17:09:54
+      tasks:
+        - task_key: weekdayLookup
+          notebook_task:
+            notebook_path: databricks/5.LookupNotebook
+            base_parameters:
+              weekday: "{{job.start_time.iso_weekday}}"
+            source: WORKSPACE
+          existing_cluster_id: 0811-163842-5k7obfnl
+        - task_key: IfWeekday
+          depends_on:
+            - task_key: weekdayLookup
+          condition_task:
+            op: EQUAL_TO
+            left: "{{tasks.weekdayLookup.values.weekoutput}}"
+            right: "7"
+        - task_key: SilverTransformationData
+          depends_on:
+            - task_key: IfWeekday
+              outcome: "true"
+          notebook_task:
+            notebook_path: databricks/4.DataTransformation
+            source: WORKSPACE
+          existing_cluster_id: 0811-163842-5k7obfnl
+        - task_key: FalseNotebook
+          depends_on:
+            - task_key: IfWeekday
+              outcome: "false"
+          notebook_task:
+            notebook_path: databricks/FalseNotebook
+            source: WORKSPACE
+          environment_key: Default
+      git_source:
+        git_url: https://github.com/Temoukam-Franck/Netflix_Azure_Data_Engineering_Project
+        git_provider: gitHub
+        git_branch: feature_3
+      queue:
+        enabled: true
+      environments:
+        - environment_key: Default
+          spec:
+            environment_version: "5"
+      performance_target: PERFORMANCE_OPTIMIZED
